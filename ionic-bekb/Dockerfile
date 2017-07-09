@@ -22,31 +22,19 @@ RUN sudo curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?
 RUN makepkg PKGBUILD --skippgpcheck 
 RUN sudo pacman -U pacaur-4.7.10-1-any.pkg.tar.xz --noconfirm
 
-RUN pacaur -S android-platform android-sdk-build-tools android-support android-support-repository --noconfirm --needed --noedit
+RUN pacaur -S android-platform android-sdk-build-tools android-support android-support-repository nvm --noconfirm --needed --noedit
 
-#USER root
-#ENV JAVA_HOME="/usr/bin/core_perl:${PATH}"
+USER root
+ENV JAVA_HOME="/usr/lib/jvm/java-7-openjdk" \
+    ANDROID_HOME="/opt/android-sdk" \
+    NODE_VERSION="4.4.7" \
+    NVM_DIR="/usr/share/nvm" \
+    NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules \
+    PATH="${PATH}:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:$NVM_DIR/v$NODE_VERSION/bin" \
+    BEKB_CODE="/code/bekbapp"
+COPY bekbapp $BEKB_CODE
+RUN . $NVM_DIR/init-nvm.sh \
+    && nvm install $NODE_VERSION \
+    && npm install -g cordova@6.1.1 ionic@2.2.3
 
-#curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
-#makepkg PKGBUILD --skippgpcheck
-# root
-#pacman -U cower-17-2-x86_64.pkg.tar.xz
-
-# batman
-# add /usr/bin/core_perl to path
-#curl -o PKGBUILD curl -o PKGBUILD https://aur.archlinux.org/cgit/aur.git/plain/PKGBUILD?h=cower
-#makepkg PKGBUILD --skippgpcheck
-# root
-#pacman -U cower-4.7.10-1-any.pkg.tar.xz
-
-#cleanup
-
-#batman
-#pacaur -S android-platformAUR
-#android-sdkAUR
-#android-sdk-platform-toolsAUR
-#android-sdk-build-toolsAUR
-
-
-
-#RUN makepkg 
+EXPOSE 8100
