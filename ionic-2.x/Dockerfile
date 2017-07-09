@@ -31,10 +31,10 @@ ENV JAVA_HOME="/usr/lib/jvm/java-7-openjdk" \
     NVM_DIR="/usr/share/nvm" \
     NODE_PATH=$NVM_DIR/v$NODE_VERSION/lib/node_modules \
     PATH="${PATH}:/opt/android-sdk/platform-tools:/opt/android-sdk/tools:$NVM_DIR/v$NODE_VERSION/bin" \
-    BEKB_CODE="/code/bekbapp"
-COPY bekbapp $BEKB_CODE
+    CODE="/code/app"
 RUN . $NVM_DIR/init-nvm.sh \
     && nvm install $NODE_VERSION \
-    && npm install -g cordova@6.1.1 ionic@2.2.3
+    && npm install -g cordova@6.1.1 ionic@2.2.3 grunt
 
-EXPOSE 8100
+# expose app, live reload
+EXPOSE 8100 35729
